@@ -7,10 +7,10 @@ from pyspark.sql.functions import col, desc
 import matplotlib.pyplot as plt
 
 
-# Setting environment variables
-os.environ["JAVA_HOME"] = "/opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk/Contents/Home"
-os.environ["SPARK_LOCAL_IP"] = "127.0.0.1"
-print(os.environ["JAVA_HOME"])
+# # Setting environment variables
+# os.environ["JAVA_HOME"] = "/opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk/Contents/Home"
+# os.environ["SPARK_LOCAL_IP"] = "127.0.0.1"
+# print(os.environ["JAVA_HOME"])
 
 LOG_FILE = "pyspark_output.md"
 
