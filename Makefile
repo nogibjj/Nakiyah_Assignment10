@@ -1,6 +1,7 @@
 install:
 	pip install --upgrade pip &&\
-		pip install -r requirements.txt
+		pip3 install -r requirements.txt
+		sudo apt-get install openjdk-11-jdk
 
 test:
 	python3 -m pytest -vv -cov=mylib test_*.py
