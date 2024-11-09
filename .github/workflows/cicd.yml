@@ -1,4 +1,5 @@
 name: CICD
+
 on:
   push:
     branches: [ "main" ]
@@ -11,28 +12,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Java
+      
+      # Install OpenJDK 11
+      - name: Install OpenJDK 11
+        run: sudo apt-get install openjdk-11-jdk -y
+
+      # Set JAVA_HOME and SPARK_LOCAL_IP environment variables
+      - name: Set JAVA_HOME and SPARK_LOCAL_IP
         run: |
-          sudo apt-get update
-          sudo apt-get install openjdk-11-jdk
           echo "JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> $GITHUB_ENV
-          echo "PATH=$JAVA_HOME/bin:$PATH" >> $GITHUB_ENV
-      - name: Set up Spark
-        run: |
-          wget https://archive.apache.org/dist/spark/spark-3.1.2/spark-3.1.2-bin-hadoop3.2.tgz
-          tar -xvzf spark-3.1.2-bin-hadoop3.2.tgz
-          sudo mv spark-3.1.2-bin-hadoop3.2 /opt/spark
-          echo "SPARK_HOME=/opt/spark" >> $GITHUB_ENV
-          echo "PATH=$SPARK_HOME/bin:$PATH" >> $GITHUB_ENV
+          echo "SPARK_LOCAL_IP=127.0.0.1" >> $GITHUB_ENV
+
+      # Set up Python 3.12
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12
+
+      # Install dependencies
       - name: install packages
         run: make install
+
+      # Run lint
       - name: lint
         run: make lint
+
+      # Run tests
       - name: test
         run: make test
+
+      # Run code formatting
       - name: format
         run: make format
+
+      # Generate and push changes
       - name: generate_and_push
         run: make generate_and_push
+
+      # Deploy step (customize this as per your needs)
       - name: deploy
         run: make deploy

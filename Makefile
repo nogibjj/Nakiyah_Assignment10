@@ -1,18 +1,14 @@
 install:
-	pip install --upgrade pip &&\
+	pip install --upgrade pip && \
 		pip3 install -r requirements.txt
-		sudo apt-get install openjdk-11-jdk
 
 test:
-	python3 -m pytest -vv -cov=mylib test_*.py
+	python3 -m pytest -vv --cov=mylib test_*.py
 
-format:	
+format:
 	black *.py 
 
 lint:
-	#disable comment to test speed
-	#pylint --disable=R,C --ignore-patterns=test_.*?py *.py mylib/*.py
-	#ruff linting is 10-100X faster than pylint
 	ruff check *.py mylib/*.py
 
 container-lint:
@@ -21,8 +17,8 @@ container-lint:
 refactor: format lint
 
 deploy:
-	#deploy goes here
-		
+	# Custom deploy command goes here
+
 all: install lint test format deploy
 
 generate_and_push:
