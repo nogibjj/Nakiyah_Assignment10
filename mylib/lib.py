@@ -55,9 +55,16 @@ def summaryStatistics(df, columns):
         Median = selected_column_df.approxQuantile(Col, [0.5], 0.05)[0]  # Approximate median
         Mean = selected_column_df.agg({Col: "mean"}).collect()[0][0]  # Calculate mean
 
-        stats[Col] = {"Summary Statistics": SumStats, "Median": Median, "Mean": Mean}
-    
-    log_output("summary statistics", str(stats))
+        # Prepare the statistics in a readable format
+        stats[Col] = {
+            "Summary Statistics": SumStats.to_markdown(),  # Converts to markdown for clarity
+            "Median": Median,
+            "Mean": Mean
+        }
+
+    # Logging the summary statistics with improved formatting
+    log_output("summary statistics", "\n".join([f"**{col}**:\n{stats[col]['Summary Statistics']}\nMedian: {stats[col]['Median']}\nMean: {stats[col]['Mean']}\n" for col in stats]))
+
     return stats
 
 # Function 3: Clean and sort data, selecting specific columns and ranks
