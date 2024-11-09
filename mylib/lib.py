@@ -70,6 +70,14 @@ def cleanData(df, ColToSort, Columns, RanksRequired):
     log_output("clean data", selected_df.limit(10).toPandas().to_markdown())
     return selected_df
 
+def queryData(spark, df, query):
+    """Run a sample Spark SQL query"""
+    df.createOrReplaceTempView("business_data")
+    result = spark.sql(query)
+    log_output("SQL query", result.toPandas().to_markdown(), query)
+    return result
+
+
 # Function 4: Generate a pie chart from a specified column
 def PiePlot(df, col, labels_col):
     """Generate a pie chart from a specified column"""
