@@ -2,9 +2,8 @@
 library functions
 """
 import os
-import requests
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import when, col, desc
+from pyspark.sql.functions import col, desc
 import matplotlib.pyplot as plt
 
 
