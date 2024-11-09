@@ -3,7 +3,7 @@ install:
 		pip install -r requirements.txt
 
 test:
-	python -m pytest -vv -cov=mylib test_*.py
+	python3 -m pytest -vv -cov=mylib test_*.py
 
 format:	
 	black *.py 
