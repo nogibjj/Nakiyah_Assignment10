@@ -2,14 +2,15 @@
 library functions
 """
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, desc
-import matplotlib.pyplot as plt
+from pyspark.sql.functions import col
+from pyspark.sql import functions as F
 
 
-# # Setting environment variables
-# os.environ["JAVA_HOME"] = "/opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk/Contents/Home"
-# os.environ["SPARK_LOCAL_IP"] = "127.0.0.1"
-# print(os.environ["JAVA_HOME"])
+# Setting environment variables
+import os
+os.environ["JAVA_HOME"] = "/opt/homebrew/opt/openjdk@11/libexec/openjdk.jdk/Contents/Home"
+os.environ["SPARK_LOCAL_IP"] = "127.0.0.1"
+print(os.environ["JAVA_HOME"])
 
 LOG_FILE = "pyspark_output.md"
 
@@ -42,29 +43,25 @@ def readData(spark, filepath):
     log_output("read data", df.limit(10).toPandas().to_markdown())
     return df
 
-# Function 2: Generate summary statistics for a specific column
+
 def summaryStatistics(df, columns):
-    """Generate summary statistics for the specified columns"""
-    stats = {}
-    for Col in columns:
-        selected_column_df = df.select(Col)
-        
-        # Calculate summary statistics
-        SumStats = selected_column_df.describe().toPandas()  # Converts to Pandas for viewing
-        Median = selected_column_df.approxQuantile(Col, [0.5], 0.05)[0]  # Approximate median
-        Mean = selected_column_df.agg({Col: "mean"}).collect()[0][0]  # Calculate mean
+    # Assume df is the DataFrame and columns is a list of column names
+    stats = []
 
-        # Prepare the statistics in a readable format
-        stats[Col] = {
-            "Summary Statistics": SumStats.to_markdown(),  # Converts to markdown for clarity
-            "Median": Median,
-            "Mean": Mean
-        }
+    for col_name in columns:
+        # Ensure column names are enclosed in backticks for SQL compatibility
+        mean_col = F.avg(col_name).alias("Mean")
+        median_col = F.expr(f"percentile_approx(`{col_name}`, 0.5)").alias("Median")
+        max_col = F.max(col_name).alias("Max")
+        min_col = F.min(col_name).alias("Min")
 
-    # Logging the summary statistics with improved formatting
-    log_output("summary statistics", "\n".join([f"**{col}**:\n{stats[col]['Summary Statistics']}\nMedian: {stats[col]['Median']}\nMean: {stats[col]['Mean']}\n" for col in stats]))
+        stats.append(df.select(mean_col, median_col, max_col, min_col))
 
-    return stats
+    # Combine the results for all columns (if needed)
+    result = stats[0]  # Just as an example, you may want to union or join these results
+    return result
+
+
 
 # Function 3: Clean and sort data, selecting specific columns and ranks
 def cleanData(df, ColToSort, Columns, RanksRequired):
@@ -83,24 +80,3 @@ def queryData(spark, df, query):
     log_output("SQL query", result.toPandas().to_markdown(), query)
     return result
 
-
-# Function 4: Generate a pie chart from a specified column
-def PiePlot(df, col, labels_col):
-    """Generate a pie chart from a specified column"""
-    # Filter out null values and sort data by the specified column
-    data = df.select(col, labels_col).na.drop()
-    data_sorted = data.orderBy(desc(col))
-
-    # Convert to Pandas for plotting (PySpark doesn’t support direct plotting)
-    pandas_df = data_sorted.toPandas()
-    values = pandas_df[col].values
-    labels = pandas_df[labels_col].values
-
-    # Plot the pie chart
-    plt.figure(figsize=(8, 8))
-    plt.pie(values, labels=labels, autopct="%1.1f%%", startangle=90, labeldistance=1.05)
-    plt.title(f"Breakdown of {col} by {labels_col}", pad=40)
-    plt.axis("equal")
-    plt.show()
-
-    return "Pie Chart displayed"

@@ -7,7 +7,6 @@ from mylib.lib import (
     summaryStatistics,
     cleanData,
     queryData,
-    PiePlot,
     start_spark,
     end_spark,
 )
@@ -56,9 +55,6 @@ def main():
     query = "SELECT * FROM business_data ORDER BY `#` LIMIT 20"
     top_schools = queryData(spark, df, query)
     top_schools.show()  # Display the top 20 schools
-
-    # Generate a pie chart (example: pie chart for the 'GoogleKnowlege_Occupation' column)
-    PiePlot(cleaned_data, col="International students (%)", labels_col="School Name")
 
     # End Spark session
     end_spark(spark)
