@@ -55,9 +55,6 @@ jobs:
       - name: Format code
         run: make format
 
-      # Generate and push changes
-      - name: Generate and push changes
-        run: make generate_and_push
 
       # Deploy step (customize this as per your needs)
       - name: Deploy

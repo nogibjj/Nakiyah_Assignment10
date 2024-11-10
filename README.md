@@ -34,7 +34,6 @@ This module contains essential functions for data processing, analysis, and visu
 ## 6. SQL Query Execution
 - `queryData(spark, df, query)`: Runs SQL queries on the DataFrame, logging the query and its output for easy exploration.
 
-## 7. Data Visualization
-- `PiePlot(df, col, labels_col)`: Creates a pie chart for a specified column with labels, using Matplotlib to display the chart.
-
+## Last
+- Finally the output can be viewed in 'pyspark_output.md' file
 Each function supports a modular, structured approach to data processing, ensuring reproducibility and efficient data workflows.
