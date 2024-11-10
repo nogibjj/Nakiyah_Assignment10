@@ -34,6 +34,5 @@ This module contains essential functions for data processing, analysis, and visu
 ## 6. SQL Query Execution
 - `queryData(spark, df, query)`: Runs SQL queries on the DataFrame, logging the query and its output for easy exploration.
 
-## Last
-- Finally the output can be viewed in 'pyspark_output.md' file
-Each function supports a modular, structured approach to data processing, ensuring reproducibility and efficient data workflows.
+
+Each function is designed to support a modular and structured approach to data processing, enabling efficient, reproducible workflows and clear documentation of results in the pyspark_output.md file.
